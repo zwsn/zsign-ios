@@ -3,7 +3,7 @@ This is an implementation package of [zsign](https://github.com/zhlynn/zsign) to
 
 ## How To Install
 In your Xcode project click file then Add Package Dependencies...
-Click local and go to the downloaded folder form the zsign-ios repository.
+Click local and go to the downloaded folder from the zsign-ios repository.
 
 ## Usage
 Package declaration goes as follows:
