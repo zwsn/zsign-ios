@@ -13,7 +13,10 @@ int zsign(const char *path,
           const char *certFile,
           const char *pKeyFile,
           const char *provFile,
-          const char *password)
+          const char *password
+		  const char *bundleId
+		  const char *displayName
+		  )
 {
     bool bWeakInject = false;
     bool bForce = true;
@@ -23,10 +26,10 @@ int zsign(const char *path,
     string strPKeyFile = pKeyFile ? pKeyFile : "";
     string strProvFile = provFile ? provFile : "";
     string strPassword = password ? password : "";
-    string strBundleId;
+    string strBundleId = bundleId ? bundleId : "";
+    string strDisplayName = displayName ? displayName : "";
     string strBundleVersion;
     string strDyLibFile;
-    string strDisplayName;
     string strEntitlementsFile;
     
     cout << strPKeyFile << endl;
