@@ -13,8 +13,8 @@ int zsign(const char *path,
           const char *certFile,
           const char *pKeyFile,
           const char *provFile,
-          const char *password
-		  const char *bundleId
+          const char *password,
+		  const char *bundleId,
 		  const char *displayName)
 {
     bool bWeakInject = false;
