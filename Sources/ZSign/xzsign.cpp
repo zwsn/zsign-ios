@@ -15,8 +15,7 @@ int zsign(const char *path,
           const char *provFile,
           const char *password
 		  const char *bundleId
-		  const char *displayName
-		  )
+		  const char *displayName)
 {
     bool bWeakInject = false;
     bool bForce = true;
