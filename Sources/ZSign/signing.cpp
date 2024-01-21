@@ -2,6 +2,7 @@
 #include "common/json.h"
 #include "common/mach-o.h"
 #include "openssl.h"
+#include "xzsign.h"
 
 static void _DERLength(string &strBlob, uint64_t uLength)
 {

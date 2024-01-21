@@ -9,21 +9,23 @@
 #define zsign_h
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
-typedef void (*ZLogCallback)(const char *message);
+    typedef void (*ZLogCallback)(const char *message);
 
-void set_zlog_callback(ZLogCallback callback);
+    extern ZLogCallback g_callback;
 
-int zsign(const char *path,
-          const char *certFile,
-          const char *pKeyFile,
-          const char *provFile,
-          const char *password,
-          const char *bundleId,
-          const char *displayName
-          );
+    void set_zlog_callback(ZLogCallback callback);
+
+    int zsign(const char *path,
+              const char *certFile,
+              const char *pKeyFile,
+              const char *provFile,
+              const char *password,
+              const char *bundleId,
+              const char *displayName);
 
 #ifdef __cplusplus
 }
