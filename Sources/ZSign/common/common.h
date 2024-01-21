@@ -128,6 +128,9 @@ private:
 class ZLog
 {
 public:
+    typedef void (*LogCallback)(const char*);
+    static LogCallback logCallback;
+
     enum eLogType
     {
         E_NONE = 0,

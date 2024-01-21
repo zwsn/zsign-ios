@@ -8,10 +8,13 @@
 #ifndef zsign_h
 #define zsign_h
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+typedef void (*ZLogCallback)(const char *message);
+
+void set_zlog_callback(ZLogCallback callback);
 
 int zsign(const char *path,
           const char *certFile,

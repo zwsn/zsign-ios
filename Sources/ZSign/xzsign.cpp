@@ -8,88 +8,104 @@
 #include <dirent.h>
 #include <getopt.h>
 
+ZLogCallback g_callback = nullptr;
+
+void set_zlog_callback(ZLogCallback callback)
+{
+	g_callback = callback;
+}
+
 int zsign(const char *path,
-          
-          const char *certFile,
-          const char *pKeyFile,
-          const char *provFile,
-          const char *password,
+
+		  const char *certFile,
+		  const char *pKeyFile,
+		  const char *provFile,
+		  const char *password,
 		  const char *bundleId,
 		  const char *displayName)
 {
-    bool bWeakInject = false;
-    bool bForce = true;
-    bool bEnableCache = false;
-    
-    string strCertFile = certFile ? certFile : "";
-    string strPKeyFile = pKeyFile ? pKeyFile : "";
-    string strProvFile = provFile ? provFile : "";
-    string strPassword = password ? password : "";
-    string strBundleId = bundleId ? bundleId : "";
-    string strDisplayName = displayName ? displayName : "";
-    string strBundleVersion;
-    string strDyLibFile;
-    string strEntitlementsFile;
-    
-    cout << strPKeyFile << endl;
-    
-    string strPath = path ? GetCanonicalizePath(path) : "";
-    if (!IsFileExists(strPath.c_str()))
-    {
-        ZLog::ErrorV(">>> Invalid Path! %s\n", strPath.c_str());
-        return -1;
-    }
-    
-    ZSignAsset zSignAsset;
-    if (!zSignAsset.Init(strCertFile, strPKeyFile, strProvFile, strEntitlementsFile, strPassword))
-    {
-        return -1;
-    }
-    
-    string strFolder = strPath;
-    ZAppBundle bundle;
-    bool bRet = bundle.SignFolder(&zSignAsset, strFolder, strBundleId, strBundleVersion, strDisplayName, strDyLibFile, bForce, bWeakInject, bEnableCache);
-    
-    return bRet ? 0 : -1;
+	bool bWeakInject = false;
+	bool bForce = true;
+	bool bEnableCache = false;
+
+	string strCertFile = certFile ? certFile : "";
+	string strPKeyFile = pKeyFile ? pKeyFile : "";
+	string strProvFile = provFile ? provFile : "";
+	string strPassword = password ? password : "";
+	string strBundleId = bundleId ? bundleId : "";
+	string strDisplayName = displayName ? displayName : "";
+	string strBundleVersion;
+	string strDyLibFile;
+	string strEntitlementsFile;
+
+	cout << strPKeyFile << endl;
+
+	string strPath = path ? GetCanonicalizePath(path) : "";
+	if (!IsFileExists(strPath.c_str()))
+	{
+		if (g_callback)
+		{
+			char buffer[1024];
+			snprintf(buffer, sizeof(buffer), ">>> Invalid Path! %s\n", strPath.c_str());
+			g_callback(buffer);
+		}
+		else
+		{
+			ZLog::ErrorV(">>> Invalid Path! %s\n", strPath.c_str());
+		}
+		return -1;
+	}
+
+	ZSignAsset zSignAsset;
+	if (!zSignAsset.Init(strCertFile, strPKeyFile, strProvFile, strEntitlementsFile, strPassword))
+	{
+		return -1;
+	}
+
+	string strFolder = strPath;
+	ZAppBundle bundle;
+	bool bRet = bundle.SignFolder(&zSignAsset, strFolder, strBundleId, strBundleVersion, strDisplayName, strDyLibFile, bForce, bWeakInject, bEnableCache);
+
+	return bRet ? 0 : -1;
 }
 
 /*int zsign(const char *path,
-          
-          const char *certFile,
-          const char *pKeyFile,
-          const char *provFile,
-          const char *password,
-          const char *bundleId,
-          const char *bundleVersion,
-          const char *dyLibFile,
-          const char *outputFile,
-          const char *displayName,
-          const char *entitlementsFile,
 
-          uint8_t force,
-          uint8_t install,
-          uint8_t weakInject,
-          uint32_t zipLevel)
+		  const char *certFile,
+		  const char *pKeyFile,
+		  const char *provFile,
+		  const char *password,
+		  const char *bundleId,
+		  const char *bundleVersion,
+		  const char *dyLibFile,
+		  const char *outputFile,
+		  const char *displayName,
+		  const char *entitlementsFile,
+
+		  uint8_t force,
+		  uint8_t install,
+		  uint8_t weakInject,
+		  uint32_t zipLevel)
 {
 	ZTimer gtimer;
-    
-    bool bWeakInject = weakInject > 0;
-    bool bInstall = install > 0;
-    bool bForce = force > 0;
-    uint32_t uZipLevel = zipLevel;
 
-    string strCertFile = certFile ? certFile : "";
-    string strPKeyFile = pKeyFile ? pKeyFile : "";
-    string strProvFile = provFile ? provFile : "";
-    string strPassword = password ? password : "";
-    string strBundleId = bundleId ? bundleId : "";
-    string strBundleVersion = bundleVersion ? bundleVersion : "";
-    string strDyLibFile = dyLibFile ? dyLibFile : "";
-    string strOutputFile = outputFile ? GetCanonicalizePath(outputFile) : "";
-    string strDisplayName = displayName ? displayName : "";
-    string strEntitlementsFile = entitlementsFile ? entitlementsFile : "";
+	bool bWeakInject = weakInject > 0;
+	bool bInstall = install > 0;
+	bool bForce = force > 0;
+	uint32_t uZipLevel = zipLevel;
 
-    
+	string strCertFile = certFile ? certFile : "";
+	string strPKeyFile = pKeyFile ? pKeyFile : "";
+	string strProvFile = provFile ? provFile : "";
+	string strPassword = password ? password : "";
+	string strBundleId = bundleId ? bundleId : "";
+	string strBundleVersion = bundleVersion ? bundleVersion : "";
+	string strDyLibFile = dyLibFile ? dyLibFile : "";
+	string strOutputFile = outputFile ? GetCanonicalizePath(outputFile) : "";
+	string strDisplayName = displayName ? displayName : "";
+	string strEntitlementsFile = entitlementsFile ? entitlementsFile : "";
+
+
 	string strPath = path ? GetCanonicalizePath(path) : "";
 	if (!IsFileExists(strPath.c_str()))
 	{
@@ -137,7 +153,7 @@ int zsign(const char *path,
 		StringFormat(strFolder, "/tmp/zsign_folder_%llu", timer.Reset());
 		ZLog::PrintV(">>> Unzip:\t%s (%s) -> %s ... \n", strPath.c_str(), GetFileSizeString(strPath.c_str()).c_str(), strFolder.c_str());
 		RemoveFolder(strFolder.c_str());
-        
+
 		if (!UnzipFile(strFolder.c_str(), strPath.c_str()))
 		{
 			RemoveFolder(strFolder.c_str());
@@ -176,7 +192,7 @@ int zsign(const char *path,
 			{
 				uZipLevel = uZipLevel > 9 ? 9 : uZipLevel;
 				RemoveFile(strOutputFile.c_str());
-                ZipFile("Payload", strOutputFile.c_str(), uZipLevel);
+				ZipFile("Payload", strOutputFile.c_str(), uZipLevel);
 				//SystemExec("zip -q -%u -r '%s' Payload", uZipLevel, strOutputFile.c_str());
 				chdir(szOldFolder);
 				if (!IsFileExists(strOutputFile.c_str()))
@@ -191,7 +207,7 @@ int zsign(const char *path,
 
 	if (bRet && bInstall)
 	{
-        ZLog::Error(">>> ideviceinstaller not available for iOS !\n");
+		ZLog::Error(">>> ideviceinstaller not available for iOS !\n");
 		//SystemExec("ideviceinstaller -i '%s'", strOutputFile.c_str());
 	}
 

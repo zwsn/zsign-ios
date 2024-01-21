@@ -698,123 +698,141 @@ int ZLog::g_nLogLevel = ZLog::E_INFO;
 
 void ZLog::SetLogLever(int nLogLevel)
 {
-	g_nLogLevel = nLogLevel;
+    g_nLogLevel = nLogLevel;
 }
 
 void ZLog::Print(int nLevel, const char *szLog)
 {
-	if (g_nLogLevel >= nLevel)
-	{
-		write(STDOUT_FILENO, szLog, strlen(szLog));
-	}
+    if (g_nLogLevel >= nLevel)
+    {
+        if (logCallback) {
+            logCallback(szLog);
+        }
+    }
 }
 
 void ZLog::PrintV(int nLevel, const char *szFormatArgs, ...)
 {
-	if (g_nLogLevel >= nLevel)
-	{
-		PARSEVALIST(szFormatArgs, szLog)
-		write(STDOUT_FILENO, szLog, strlen(szLog));
-	}
+    if (g_nLogLevel >= nLevel)
+    {
+        PARSEVALIST(szFormatArgs, szLog)
+        if (logCallback) {
+            logCallback(szLog);
+        }
+    }
 }
 
 bool ZLog::Error(const char *szLog)
 {
-	write(STDOUT_FILENO, "\033[31m", 5);
-	write(STDOUT_FILENO, szLog, strlen(szLog));
-	write(STDOUT_FILENO, "\033[0m", 4);
-	return false;
+    if (logCallback) {
+        logCallback(szLog);
+    }
+    return false;
 }
 
 bool ZLog::ErrorV(const char *szFormatArgs, ...)
 {
-	PARSEVALIST(szFormatArgs, szLog)
-	write(STDOUT_FILENO, "\033[31m", 5);
-	write(STDOUT_FILENO, szLog, strlen(szLog));
-	write(STDOUT_FILENO, "\033[0m", 4);
-	return false;
+    PARSEVALIST(szFormatArgs, szLog)
+    if (logCallback) {
+        logCallback(szLog);
+    }
+    return false;
 }
 
 bool ZLog::Success(const char *szLog)
 {
-	write(STDOUT_FILENO, "\033[32m", 5);
-	write(STDOUT_FILENO, szLog, strlen(szLog));
-	write(STDOUT_FILENO, "\033[0m", 4);
-	return true;
+    if (logCallback) {
+        logCallback(szLog);
+    }
+    return true;
 }
 
 bool ZLog::SuccessV(const char *szFormatArgs, ...)
 {
-	PARSEVALIST(szFormatArgs, szLog)
-	write(STDOUT_FILENO, "\033[32m", 5);
-	write(STDOUT_FILENO, szLog, strlen(szLog));
-	write(STDOUT_FILENO, "\033[0m", 4);
-	return true;
+    PARSEVALIST(szFormatArgs, szLog)
+    if (logCallback) {
+        logCallback(szLog);
+    }
+    return true;
 }
 
 bool ZLog::PrintResult(bool bSuccess, const char *szLog)
 {
-	return bSuccess ? Success(szLog) : Error(szLog);
+    if (logCallback) {
+        logCallback(szLog);
+    }
+    return bSuccess ? Success(szLog) : Error(szLog);
 }
 
 bool ZLog::PrintResultV(bool bSuccess, const char *szFormatArgs, ...)
 {
-	PARSEVALIST(szFormatArgs, szLog)
-	return bSuccess ? Success(szLog) : Error(szLog);
+    PARSEVALIST(szFormatArgs, szLog)
+    if (logCallback) {
+        logCallback(szLog);
+    }
+    return bSuccess ? Success(szLog) : Error(szLog);
 }
 
 bool ZLog::Warn(const char *szLog)
 {
-	write(STDOUT_FILENO, "\033[33m", 5);
-	write(STDOUT_FILENO, szLog, strlen(szLog));
-	write(STDOUT_FILENO, "\033[0m", 4);
-	return false;
+    if (logCallback) {
+        logCallback(szLog);
+    }
+    return false;
 }
 
 bool ZLog::WarnV(const char *szFormatArgs, ...)
 {
-	PARSEVALIST(szFormatArgs, szLog)
-	write(STDOUT_FILENO, "\033[33m", 5);
-	write(STDOUT_FILENO, szLog, strlen(szLog));
-	write(STDOUT_FILENO, "\033[0m", 4);
-	return false;
+    PARSEVALIST(szFormatArgs, szLog)
+    if (logCallback) {
+        logCallback(szLog);
+    }
+    return false;
 }
 
 void ZLog::Print(const char *szLog)
 {
-	if (g_nLogLevel >= E_INFO)
-	{
-		write(STDOUT_FILENO, szLog, strlen(szLog));
-	}
+    if (g_nLogLevel >= E_INFO)
+    {
+        if (logCallback) {
+            logCallback(szLog);
+        }
+    }
 }
 
 void ZLog::PrintV(const char *szFormatArgs, ...)
 {
-	if (g_nLogLevel >= E_INFO)
-	{
-		PARSEVALIST(szFormatArgs, szLog)
-		write(STDOUT_FILENO, szLog, strlen(szLog));
-	}
+    if (g_nLogLevel >= E_INFO)
+    {
+        PARSEVALIST(szFormatArgs, szLog)
+        if (logCallback) {
+            logCallback(szLog);
+        }
+    }
 }
 
 void ZLog::Debug(const char *szLog)
 {
-	if (g_nLogLevel >= E_DEBUG)
-	{
-		write(STDOUT_FILENO, szLog, strlen(szLog));
-	}
+    if (g_nLogLevel >= E_DEBUG)
+    {
+        if (logCallback) {
+            logCallback(szLog);
+        }
+    }
 }
 
 void ZLog::DebugV(const char *szFormatArgs, ...)
 {
-	if (g_nLogLevel >= E_DEBUG)
-	{
-		PARSEVALIST(szFormatArgs, szLog)
-		write(STDOUT_FILENO, szLog, strlen(szLog));
-	}
+    if (g_nLogLevel >= E_DEBUG)
+    {
+        PARSEVALIST(szFormatArgs, szLog)
+        if (logCallback) {
+            logCallback(szLog);
+        }
+    }
 }
 
 bool ZLog::IsDebug()
 {
-	return (E_DEBUG == g_nLogLevel);
+    return (E_DEBUG == g_nLogLevel);
 }
