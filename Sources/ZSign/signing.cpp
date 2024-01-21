@@ -2,7 +2,6 @@
 #include "common/json.h"
 #include "common/mach-o.h"
 #include "openssl.h"
-#include "xzsign.h"
 
 static void _DERLength(string &strBlob, uint64_t uLength)
 {
@@ -110,20 +109,6 @@ static string _DER(const JValue &data)
 uint32_t SlotParseGeneralHeader(const char *szSlotName, uint8_t *pSlotBase, CS_BlobIndex *pbi)
 {
 	uint32_t uSlotLength = LE(*(((uint32_t *)pSlotBase) + 1));
-	if (g_callback)
-	{
-		char buffer[1024];
-		snprintf(buffer, sizeof(buffer), "\n  > %s: \n", szSlotName);
-		g_callback(buffer);
-		snprintf(buffer, sizeof(buffer), "\ttype: \t\t0x%x\n", LE(pbi->type));
-		g_callback(buffer);
-		snprintf(buffer, sizeof(buffer), "\toffset: \t%u\n", LE(pbi->offset));
-		g_callback(buffer);
-		snprintf(buffer, sizeof(buffer), "\tmagic: \t\t0x%x\n", LE(*((uint32_t *)pSlotBase)));
-		g_callback(buffer);
-		snprintf(buffer, sizeof(buffer), "\tlength: \t%u\n", uSlotLength);
-		g_callback(buffer);
-	}
 	ZLog::PrintV("\n  > %s: \n", szSlotName);
 	ZLog::PrintV("\ttype: \t\t0x%x\n", LE(pbi->type));
 	ZLog::PrintV("\toffset: \t%u\n", LE(pbi->offset));

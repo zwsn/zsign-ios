@@ -13,12 +13,6 @@ extern "C"
 {
 #endif
 
-    typedef void (*ZLogCallback)(const char *message);
-
-    extern ZLogCallback g_callback;
-
-    void set_zlog_callback(ZLogCallback callback);
-
     int zsign(const char *path,
               const char *certFile,
               const char *pKeyFile,

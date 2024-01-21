@@ -8,13 +8,6 @@
 #include <dirent.h>
 #include <getopt.h>
 
-ZLogCallback g_callback = nullptr;
-
-void set_zlog_callback(ZLogCallback callback)
-{
-	g_callback = callback;
-}
-
 int zsign(const char *path,
 
 		  const char *certFile,
@@ -43,16 +36,7 @@ int zsign(const char *path,
 	string strPath = path ? GetCanonicalizePath(path) : "";
 	if (!IsFileExists(strPath.c_str()))
 	{
-		if (g_callback)
-		{
-			char buffer[1024];
-			snprintf(buffer, sizeof(buffer), ">>> Invalid Path! %s\n", strPath.c_str());
-			g_callback(buffer);
-		}
-		else
-		{
-			ZLog::ErrorV(">>> Invalid Path! %s\n", strPath.c_str());
-		}
+		ZLog::ErrorV(">>> Invalid Path! %s\n", strPath.c_str());
 		return -1;
 	}
 

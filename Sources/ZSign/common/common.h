@@ -30,7 +30,7 @@ using namespace std;
 #define BE(x) _Swap(x)
 
 #if !defined(S_ISREG) && defined(S_IFMT) && defined(S_IFREG)
-#define S_ISREG(m) (((m)&S_IFMT) == S_IFREG)
+#define S_ISREG(m) (((m) & S_IFMT) == S_IFREG)
 #endif
 
 uint16_t _Swap(uint16_t value);
@@ -128,9 +128,6 @@ private:
 class ZLog
 {
 public:
-    typedef void (*LogCallback)(const char*);
-    static LogCallback logCallback;
-
     enum eLogType
     {
         E_NONE = 0,

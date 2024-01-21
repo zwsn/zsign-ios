@@ -5,8 +5,6 @@
 #include <inttypes.h>
 #include <openssl/sha.h>
 
-ZLog::LogCallback ZLog::logCallback = nullptr;
-
 #define PARSEVALIST(szFormatArgs, szArgs)                       \
 	ZBuffer buffer;                                             \
 	char szBuffer[PATH_MAX] = {0};                              \
@@ -707,10 +705,7 @@ void ZLog::Print(int nLevel, const char *szLog)
 {
 	if (g_nLogLevel >= nLevel)
 	{
-		if (logCallback)
-		{
-			logCallback(szLog);
-		}
+		write(STDOUT_FILENO, szLog, strlen(szLog));
 	}
 }
 
@@ -719,86 +714,69 @@ void ZLog::PrintV(int nLevel, const char *szFormatArgs, ...)
 	if (g_nLogLevel >= nLevel)
 	{
 		PARSEVALIST(szFormatArgs, szLog)
-		if (logCallback)
-		{
-			logCallback(szLog);
-		}
+		write(STDOUT_FILENO, szLog, strlen(szLog));
 	}
 }
 
 bool ZLog::Error(const char *szLog)
 {
-	if (logCallback)
-	{
-		logCallback(szLog);
-	}
+	write(STDOUT_FILENO, "\033[31m", 5);
+	write(STDOUT_FILENO, szLog, strlen(szLog));
+	write(STDOUT_FILENO, "\033[0m", 4);
 	return false;
 }
 
 bool ZLog::ErrorV(const char *szFormatArgs, ...)
 {
 	PARSEVALIST(szFormatArgs, szLog)
-	if (logCallback)
-	{
-		logCallback(szLog);
-	}
+	write(STDOUT_FILENO, "\033[31m", 5);
+	write(STDOUT_FILENO, szLog, strlen(szLog));
+	write(STDOUT_FILENO, "\033[0m", 4);
 	return false;
 }
 
 bool ZLog::Success(const char *szLog)
 {
-	if (logCallback)
-	{
-		logCallback(szLog);
-	}
+	write(STDOUT_FILENO, "\033[32m", 5);
+	write(STDOUT_FILENO, szLog, strlen(szLog));
+	write(STDOUT_FILENO, "\033[0m", 4);
 	return true;
 }
 
 bool ZLog::SuccessV(const char *szFormatArgs, ...)
 {
 	PARSEVALIST(szFormatArgs, szLog)
-	if (logCallback)
-	{
-		logCallback(szLog);
-	}
+	write(STDOUT_FILENO, "\033[32m", 5);
+	write(STDOUT_FILENO, szLog, strlen(szLog));
+	write(STDOUT_FILENO, "\033[0m", 4);
 	return true;
 }
 
 bool ZLog::PrintResult(bool bSuccess, const char *szLog)
 {
-	if (logCallback)
-	{
-		logCallback(szLog);
-	}
 	return bSuccess ? Success(szLog) : Error(szLog);
 }
 
 bool ZLog::PrintResultV(bool bSuccess, const char *szFormatArgs, ...)
 {
 	PARSEVALIST(szFormatArgs, szLog)
-	if (logCallback)
-	{
-		logCallback(szLog);
-	}
 	return bSuccess ? Success(szLog) : Error(szLog);
 }
 
 bool ZLog::Warn(const char *szLog)
 {
-	if (logCallback)
-	{
-		logCallback(szLog);
-	}
+	write(STDOUT_FILENO, "\033[33m", 5);
+	write(STDOUT_FILENO, szLog, strlen(szLog));
+	write(STDOUT_FILENO, "\033[0m", 4);
 	return false;
 }
 
 bool ZLog::WarnV(const char *szFormatArgs, ...)
 {
 	PARSEVALIST(szFormatArgs, szLog)
-	if (logCallback)
-	{
-		logCallback(szLog);
-	}
+	write(STDOUT_FILENO, "\033[33m", 5);
+	write(STDOUT_FILENO, szLog, strlen(szLog));
+	write(STDOUT_FILENO, "\033[0m", 4);
 	return false;
 }
 
@@ -806,10 +784,7 @@ void ZLog::Print(const char *szLog)
 {
 	if (g_nLogLevel >= E_INFO)
 	{
-		if (logCallback)
-		{
-			logCallback(szLog);
-		}
+		write(STDOUT_FILENO, szLog, strlen(szLog));
 	}
 }
 
@@ -818,10 +793,7 @@ void ZLog::PrintV(const char *szFormatArgs, ...)
 	if (g_nLogLevel >= E_INFO)
 	{
 		PARSEVALIST(szFormatArgs, szLog)
-		if (logCallback)
-		{
-			logCallback(szLog);
-		}
+		write(STDOUT_FILENO, szLog, strlen(szLog));
 	}
 }
 
@@ -829,10 +801,7 @@ void ZLog::Debug(const char *szLog)
 {
 	if (g_nLogLevel >= E_DEBUG)
 	{
-		if (logCallback)
-		{
-			logCallback(szLog);
-		}
+		write(STDOUT_FILENO, szLog, strlen(szLog));
 	}
 }
 
@@ -841,10 +810,7 @@ void ZLog::DebugV(const char *szFormatArgs, ...)
 	if (g_nLogLevel >= E_DEBUG)
 	{
 		PARSEVALIST(szFormatArgs, szLog)
-		if (logCallback)
-		{
-			logCallback(szLog);
-		}
+		write(STDOUT_FILENO, szLog, strlen(szLog));
 	}
 }
 
