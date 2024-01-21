@@ -5,6 +5,8 @@
 #include <inttypes.h>
 #include <openssl/sha.h>
 
+ZLog::LogCallback ZLog::logCallback = nullptr;
+
 #define PARSEVALIST(szFormatArgs, szArgs)                       \
 	ZBuffer buffer;                                             \
 	char szBuffer[PATH_MAX] = {0};                              \
@@ -412,7 +414,7 @@ uint64_t GetMicroSecond()
 
 bool SystemExec(const char *szFormatCmd, ...)
 {
-    return false;
+	return false;
 	/*PARSEVALIST(szFormatCmd, szCmd)
 
 	if (strlen(szCmd) <= 0)
@@ -698,141 +700,155 @@ int ZLog::g_nLogLevel = ZLog::E_INFO;
 
 void ZLog::SetLogLever(int nLogLevel)
 {
-    g_nLogLevel = nLogLevel;
+	g_nLogLevel = nLogLevel;
 }
 
 void ZLog::Print(int nLevel, const char *szLog)
 {
-    if (g_nLogLevel >= nLevel)
-    {
-        if (logCallback) {
-            logCallback(szLog);
-        }
-    }
+	if (g_nLogLevel >= nLevel)
+	{
+		if (logCallback)
+		{
+			logCallback(szLog);
+		}
+	}
 }
 
 void ZLog::PrintV(int nLevel, const char *szFormatArgs, ...)
 {
-    if (g_nLogLevel >= nLevel)
-    {
-        PARSEVALIST(szFormatArgs, szLog)
-        if (logCallback) {
-            logCallback(szLog);
-        }
-    }
+	if (g_nLogLevel >= nLevel)
+	{
+		PARSEVALIST(szFormatArgs, szLog)
+		if (logCallback)
+		{
+			logCallback(szLog);
+		}
+	}
 }
 
 bool ZLog::Error(const char *szLog)
 {
-    if (logCallback) {
-        logCallback(szLog);
-    }
-    return false;
+	if (logCallback)
+	{
+		logCallback(szLog);
+	}
+	return false;
 }
 
 bool ZLog::ErrorV(const char *szFormatArgs, ...)
 {
-    PARSEVALIST(szFormatArgs, szLog)
-    if (logCallback) {
-        logCallback(szLog);
-    }
-    return false;
+	PARSEVALIST(szFormatArgs, szLog)
+	if (logCallback)
+	{
+		logCallback(szLog);
+	}
+	return false;
 }
 
 bool ZLog::Success(const char *szLog)
 {
-    if (logCallback) {
-        logCallback(szLog);
-    }
-    return true;
+	if (logCallback)
+	{
+		logCallback(szLog);
+	}
+	return true;
 }
 
 bool ZLog::SuccessV(const char *szFormatArgs, ...)
 {
-    PARSEVALIST(szFormatArgs, szLog)
-    if (logCallback) {
-        logCallback(szLog);
-    }
-    return true;
+	PARSEVALIST(szFormatArgs, szLog)
+	if (logCallback)
+	{
+		logCallback(szLog);
+	}
+	return true;
 }
 
 bool ZLog::PrintResult(bool bSuccess, const char *szLog)
 {
-    if (logCallback) {
-        logCallback(szLog);
-    }
-    return bSuccess ? Success(szLog) : Error(szLog);
+	if (logCallback)
+	{
+		logCallback(szLog);
+	}
+	return bSuccess ? Success(szLog) : Error(szLog);
 }
 
 bool ZLog::PrintResultV(bool bSuccess, const char *szFormatArgs, ...)
 {
-    PARSEVALIST(szFormatArgs, szLog)
-    if (logCallback) {
-        logCallback(szLog);
-    }
-    return bSuccess ? Success(szLog) : Error(szLog);
+	PARSEVALIST(szFormatArgs, szLog)
+	if (logCallback)
+	{
+		logCallback(szLog);
+	}
+	return bSuccess ? Success(szLog) : Error(szLog);
 }
 
 bool ZLog::Warn(const char *szLog)
 {
-    if (logCallback) {
-        logCallback(szLog);
-    }
-    return false;
+	if (logCallback)
+	{
+		logCallback(szLog);
+	}
+	return false;
 }
 
 bool ZLog::WarnV(const char *szFormatArgs, ...)
 {
-    PARSEVALIST(szFormatArgs, szLog)
-    if (logCallback) {
-        logCallback(szLog);
-    }
-    return false;
+	PARSEVALIST(szFormatArgs, szLog)
+	if (logCallback)
+	{
+		logCallback(szLog);
+	}
+	return false;
 }
 
 void ZLog::Print(const char *szLog)
 {
-    if (g_nLogLevel >= E_INFO)
-    {
-        if (logCallback) {
-            logCallback(szLog);
-        }
-    }
+	if (g_nLogLevel >= E_INFO)
+	{
+		if (logCallback)
+		{
+			logCallback(szLog);
+		}
+	}
 }
 
 void ZLog::PrintV(const char *szFormatArgs, ...)
 {
-    if (g_nLogLevel >= E_INFO)
-    {
-        PARSEVALIST(szFormatArgs, szLog)
-        if (logCallback) {
-            logCallback(szLog);
-        }
-    }
+	if (g_nLogLevel >= E_INFO)
+	{
+		PARSEVALIST(szFormatArgs, szLog)
+		if (logCallback)
+		{
+			logCallback(szLog);
+		}
+	}
 }
 
 void ZLog::Debug(const char *szLog)
 {
-    if (g_nLogLevel >= E_DEBUG)
-    {
-        if (logCallback) {
-            logCallback(szLog);
-        }
-    }
+	if (g_nLogLevel >= E_DEBUG)
+	{
+		if (logCallback)
+		{
+			logCallback(szLog);
+		}
+	}
 }
 
 void ZLog::DebugV(const char *szFormatArgs, ...)
 {
-    if (g_nLogLevel >= E_DEBUG)
-    {
-        PARSEVALIST(szFormatArgs, szLog)
-        if (logCallback) {
-            logCallback(szLog);
-        }
-    }
+	if (g_nLogLevel >= E_DEBUG)
+	{
+		PARSEVALIST(szFormatArgs, szLog)
+		if (logCallback)
+		{
+			logCallback(szLog);
+		}
+	}
 }
 
 bool ZLog::IsDebug()
 {
-    return (E_DEBUG == g_nLogLevel);
+	return (E_DEBUG == g_nLogLevel);
 }
