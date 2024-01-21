@@ -124,14 +124,11 @@ uint32_t SlotParseGeneralHeader(const char *szSlotName, uint8_t *pSlotBase, CS_B
 		snprintf(buffer, sizeof(buffer), "\tlength: \t%u\n", uSlotLength);
 		g_callback(buffer);
 	}
-	else
-	{
-		ZLog::PrintV("\n  > %s: \n", szSlotName);
-		ZLog::PrintV("\ttype: \t\t0x%x\n", LE(pbi->type));
-		ZLog::PrintV("\toffset: \t%u\n", LE(pbi->offset));
-		ZLog::PrintV("\tmagic: \t\t0x%x\n", LE(*((uint32_t *)pSlotBase)));
-		ZLog::PrintV("\tlength: \t%u\n", uSlotLength);
-	}
+	ZLog::PrintV("\n  > %s: \n", szSlotName);
+	ZLog::PrintV("\ttype: \t\t0x%x\n", LE(pbi->type));
+	ZLog::PrintV("\toffset: \t%u\n", LE(pbi->offset));
+	ZLog::PrintV("\tmagic: \t\t0x%x\n", LE(*((uint32_t *)pSlotBase)));
+	ZLog::PrintV("\tlength: \t%u\n", uSlotLength);
 	return uSlotLength;
 }
 
