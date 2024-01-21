@@ -644,18 +644,18 @@ bool ZAppBundle::SignFolder(ZSignAsset *pSignAsset,
 		jvRoot.readPath("./.zsign_cache/%s.json", strCacheName.c_str());
 	}
 
-	if (g_callback)
-	{
-		char buffer[1024];
-		snprintf(buffer, sizeof(buffer), ">>> Signing: \t%s ...\n", m_strAppFolder.c_str());
-		snprintf(buffer, sizeof(buffer), ">>> AppName: \t%s\n", jvRoot["name"].asCString());
-		snprintf(buffer, sizeof(buffer), ">>> BundleId: \t%s\n", jvRoot["bid"].asCString());
-		snprintf(buffer, sizeof(buffer), ">>> BundleVer: \t%s\n", jvRoot["bver"].asCString());
-		snprintf(buffer, sizeof(buffer), ">>> TeamId: \t%s\n", m_pSignAsset->m_strTeamId.c_str());
-		snprintf(buffer, sizeof(buffer), ">>> SubjectCN: \t%s\n", m_pSignAsset->m_strSubjectCN.c_str());
-		snprintf(buffer, sizeof(buffer), ">>> ReadCache: \t%s\n", m_bForceSign ? "NO" : "YES");
-		g_callback(buffer);
-	}
+	// if (g_callback)
+	// {
+	// 	char buffer[1024];
+	// 	snprintf(buffer, sizeof(buffer), ">>> Signing: \t%s ...\n", m_strAppFolder.c_str());
+	// 	snprintf(buffer, sizeof(buffer), ">>> AppName: \t%s\n", jvRoot["name"].asCString());
+	// 	snprintf(buffer, sizeof(buffer), ">>> BundleId: \t%s\n", jvRoot["bid"].asCString());
+	// 	snprintf(buffer, sizeof(buffer), ">>> BundleVer: \t%s\n", jvRoot["bver"].asCString());
+	// 	snprintf(buffer, sizeof(buffer), ">>> TeamId: \t%s\n", m_pSignAsset->m_strTeamId.c_str());
+	// 	snprintf(buffer, sizeof(buffer), ">>> SubjectCN: \t%s\n", m_pSignAsset->m_strSubjectCN.c_str());
+	// 	snprintf(buffer, sizeof(buffer), ">>> ReadCache: \t%s\n", m_bForceSign ? "NO" : "YES");
+	// 	g_callback(buffer);
+	// }
 
 	ZLog::PrintV(">>> Signing: \t%s ...\n", m_strAppFolder.c_str());
 	ZLog::PrintV(">>> AppName: \t%s\n", jvRoot["name"].asCString());
